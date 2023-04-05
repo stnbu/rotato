@@ -1,15 +1,15 @@
-use std::collections::HashMap;
+use bevy::prelude::*;
+use rand::prelude::*;
+use std::f32::consts::TAU;
 
 #[derive(Debug, Default)]
-struct TreeNode {
-    transform: bool,
-    rotation: bool,
-    children: Vec<TreeNode>,
+pub struct TreeNode {
+    pub transform: Transform,
+    pub rps: f32,
+    pub children: Vec<TreeNode>,
 }
 
-use rand::prelude::*;
-
-fn generate_tree(depth: i32, max_depth: i32, max_children: usize) -> TreeNode {
+pub fn generate_tree(depth: i32, max_depth: i32, max_children: usize) -> TreeNode {
     if depth >= max_depth {
         return TreeNode::default();
     }
@@ -20,22 +20,21 @@ fn generate_tree(depth: i32, max_depth: i32, max_children: usize) -> TreeNode {
         print!(".");
         children.push(generate_tree(depth + 1, max_depth, max_children));
     }
-    TreeNode::default().apply_children(children)
+    let x: f32 = 1.0 + rng.gen::<f32>() * 0.2;
+    let y: f32 = 1.0 + rng.gen::<f32>() * 0.1;
+    let transform = Transform::from_translation(Vec3::Y * x + Vec3::X * x);
+    let rps: f32 = rng.gen::<f32>() * 0.1 * TAU;
+    TreeNode {
+        transform,
+        rps,
+        ..Default::default()
+    }
+    .apply_children(children)
 }
 
 impl TreeNode {
-    fn apply_children(mut self, children: Vec<TreeNode>) -> Self {
+    pub fn apply_children(mut self, children: Vec<TreeNode>) -> Self {
         self.children = children;
         self
     }
-}
-
-pub fn blah() {
-    let depth = 4;
-    let max_children = 3;
-
-    let root = generate_tree(0, depth, max_children);
-
-    //let hash_map = walk_tree(&root);
-    //println!("{:#?}", hash_map);
 }
