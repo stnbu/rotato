@@ -2,9 +2,14 @@ use bevy::{
     input::mouse::{MouseMotion, MouseWheel},
     prelude::*,
 };
+
+mod tree;
+use tree::*;
+
 const EPSILON: f32 = 0.00001;
 
 fn main() {
+    blah();
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_startup_system(setup)
@@ -90,6 +95,9 @@ fn control(
         }
     }
 }
+
+#[derive(Component)]
+struct RotRate(u32);
 
 fn setup(
     mut commands: Commands,
