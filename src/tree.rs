@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::view::visibility};
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
@@ -15,8 +15,8 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> (Entity, Entity) {
-    let max_children = 1;
-    let max_depth = 3;
+    let max_children = 2;
+    let max_depth = 8;
     //
     let mut rng = rand::thread_rng();
     let num_children: usize = rng.gen::<usize>() % max_children + 1;
@@ -42,6 +42,12 @@ pub fn generate_tree<'a>(
     } else {
         Transform::from_translation(translation)
     };
+    // ssostupid
+    let visibility = if depth == 0 {
+        Visibility::Hidden
+    } else {
+        Visibility::Visible
+    };
     let stick = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
@@ -52,6 +58,7 @@ pub fn generate_tree<'a>(
                 }
                 .into(),
             ),
+            visibility,
             material: materials.add(Color::GREEN.into()),
             transform: Transform::from_translation(translation / 2.0)
                 .with_rotation(Quat::from_rotation_arc(Vec3::Y, translation.normalize())),
@@ -72,7 +79,7 @@ pub fn generate_tree<'a>(
             transform,
             ..Default::default()
         })
-        .insert(Rps(rng.gen::<f32>() * TAU / 360.0))
+        .insert(Rps(rng.gen::<f32>() * TAU / 360.0 * 10.0))
         .push_children(children.as_slice())
         .id();
     (sphere, stick)
