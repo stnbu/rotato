@@ -4,6 +4,9 @@ use std::f32::consts::TAU;
 
 use crate::random_unit_vector;
 
+#[derive(Component)]
+pub struct Rps(pub f32);
+
 pub fn generate_tree<'a>(
     depth: i32,
     max_depth: i32,
@@ -43,7 +46,7 @@ pub fn generate_tree<'a>(
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::Cylinder {
-                    height: translation.length() - 1.0,
+                    height: translation.length() - 0.2,
                     radius: 0.03,
                     ..Default::default()
                 }
@@ -69,7 +72,15 @@ pub fn generate_tree<'a>(
             transform,
             ..Default::default()
         })
+        .insert(Rps(rng.gen::<f32>() * TAU / 360.0))
         .push_children(children.as_slice())
         .id();
     (sphere, stick)
+}
+
+pub fn rotate(mut rotations: Query<(&mut Transform, &Rps)>, time: Res<Time>) {
+    for (mut transform, &Rps(rps)) in rotations.iter_mut() {
+        let delta_s = time.delta_seconds();
+        transform.rotate_y(rps * delta_s);
+    }
 }

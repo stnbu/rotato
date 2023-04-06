@@ -13,6 +13,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_startup_system(setup)
         .add_startup_system(spawn_camera)
+        .add_system(rotate)
         .add_system(control)
         .run();
 }
@@ -46,7 +47,7 @@ fn spawn_camera(mut commands: Commands) {
         .with_children(|children| {
             children.spawn((
                 Camera3dBundle {
-                    transform: Transform::from_translation(Vec3::Z * 50.0)
+                    transform: Transform::from_translation(Vec3::Z * 5.0)
                         .looking_at(Vec3::ZERO, Vec3::Y),
                     ..Default::default()
                 },
