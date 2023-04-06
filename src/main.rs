@@ -110,5 +110,14 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    generate_tree(0, 4, 3, &mut commands, &mut meshes, &mut materials);
+    let max_depth = 6;
+    let max_children = 4;
+    generate_tree(
+        0,
+        max_depth,
+        max_children,
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+    );
 }
