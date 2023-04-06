@@ -31,10 +31,11 @@ pub fn generate_tree<'a>(
         }
     }
 
+    let translation = random_unit_vector() + rng.gen::<f32>();
     let transform = if depth == 0 {
         Transform::default()
     } else {
-        Transform::from_translation(random_unit_vector() + rng.gen::<f32>())
+        Transform::from_translation(translation)
     };
     let entity = commands
         .spawn(PbrBundle {
@@ -45,15 +46,23 @@ pub fn generate_tree<'a>(
                 }
                 .into(),
             ),
-            material: materials.add(Color::WHITE.into()),
+            material: materials.add(Color::BLUE.into()),
             transform,
             ..Default::default()
         })
         .push_children(children.as_slice())
         .with_children(|children| {
             children.spawn(PbrBundle {
-                mesh: meshes.add(shape::Cylinder::default().into()),
-                material: materials.add(Color::WHITE.into()),
+                mesh: meshes.add(
+                    shape::Cylinder {
+                        height: 0.2,
+                        radius: 0.03,
+                        ..Default::default()
+                    }
+                    .into(),
+                ),
+                material: materials.add(Color::GREEN.into()),
+                transform: Transform::from_translation(Vec3::Z * translation.length()),
                 ..Default::default()
             });
         })
