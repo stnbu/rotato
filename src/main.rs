@@ -23,6 +23,19 @@ struct CameraGimbal;
 #[derive(Component)]
 struct CameraBoom;
 use bevy::prelude::SpatialBundle;
+
+use rand::prelude::*;
+use std::f64::consts::TAU;
+fn random_unit_vector() -> (f64, f64, f64) {
+    let mut rng = rand::thread_rng();
+    let theta = rng.gen::<f64>() * TAU;
+    let phi = rng.gen::<f64>() * TAU / 2.0;
+    let x = phi.sin() * theta.cos();
+    let y = phi.sin() * theta.sin();
+    let z = phi.cos();
+    (x, y, z)
+}
+
 fn spawn_camera(mut commands: Commands) {
     commands.spawn(SpatialBundle {
         visibility: Visibility::Visible,
@@ -33,7 +46,7 @@ fn spawn_camera(mut commands: Commands) {
         .with_children(|children| {
             children.spawn((
                 Camera3dBundle {
-                    transform: Transform::from_translation(Vec3::Z * 3.5)
+                    transform: Transform::from_translation(Vec3::Z * 50.0)
                         .looking_at(Vec3::ZERO, Vec3::Y),
                     ..Default::default()
                 },
