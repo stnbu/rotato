@@ -41,7 +41,7 @@ pub fn generate_tree<'a>(
         commands.spawn(PbrBundle {
             mesh: meshes.add(
                 shape::Cylinder {
-                    height: 0.35,
+                    height: translation.length() - 1.0,
                     radius: 0.03,
                     ..Default::default()
                 }
