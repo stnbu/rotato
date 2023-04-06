@@ -37,6 +37,23 @@ pub fn generate_tree<'a>(
     } else {
         Transform::from_translation(translation)
     };
+    if depth > 0 {
+        commands.spawn(PbrBundle {
+            mesh: meshes.add(
+                shape::Cylinder {
+                    height: 0.35,
+                    radius: 0.03,
+                    ..Default::default()
+                }
+                .into(),
+            ),
+            material: materials.add(Color::GREEN.into()),
+            transform: Transform::from_translation(translation / 2.0)
+                .with_rotation(Quat::from_rotation_arc(Vec3::Y, translation.normalize())),
+            ..Default::default()
+        });
+    }
+
     let entity = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
@@ -51,21 +68,6 @@ pub fn generate_tree<'a>(
             ..Default::default()
         })
         .push_children(children.as_slice())
-        .with_children(|children| {
-            children.spawn(PbrBundle {
-                mesh: meshes.add(
-                    shape::Cylinder {
-                        height: 0.2,
-                        radius: 0.03,
-                        ..Default::default()
-                    }
-                    .into(),
-                ),
-                material: materials.add(Color::GREEN.into()),
-                transform: Transform::from_translation(Vec3::Z * translation.length()),
-                ..Default::default()
-            });
-        })
         .id();
     entity
 }
