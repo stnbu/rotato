@@ -12,8 +12,8 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> Entity {
-    let max_children = 1;
-    let max_depth = 1;
+    let max_children = 3;
+    let max_depth = 3;
     //
     let mut rng = rand::thread_rng();
     let num_children: usize = rng.gen::<usize>() % max_children + 1;
@@ -31,7 +31,7 @@ pub fn generate_tree<'a>(
         }
     }
 
-    let translation = random_unit_vector() + rng.gen::<f32>();
+    let translation = random_unit_vector() * (1.0 + rng.gen::<f32>());
     let transform = if depth == 0 {
         Transform::default()
     } else {
