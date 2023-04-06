@@ -52,7 +52,7 @@ fn spawn_camera(mut commands: Commands) {
                 },
                 CameraGimbal,
             ));
-            for _ in 0..10 {
+            for _ in 0..5 {
                 children.spawn(DirectionalLightBundle {
                     transform: Transform::default().looking_at(random_unit_vector(), Vec3::Y),
                     visibility: Visibility::Visible,

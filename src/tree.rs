@@ -2,6 +2,8 @@ use bevy::prelude::*;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
+use crate::random_unit_vector;
+
 pub fn generate_tree<'a>(
     depth: i32,
     max_depth: i32,
@@ -32,9 +34,7 @@ pub fn generate_tree<'a>(
     let transform = if depth == 0 {
         Transform::default()
     } else {
-        let x: f32 = rng.gen::<f32>() * 0.2;
-        let y: f32 = 2.0 + rng.gen::<f32>() * 0.1;
-        Transform::from_translation(Vec3::Y * y + Vec3::X * x)
+        Transform::from_translation(random_unit_vector() + rng.gen::<f32>())
     };
     let entity = commands
         .spawn(PbrBundle {
@@ -50,6 +50,13 @@ pub fn generate_tree<'a>(
             ..Default::default()
         })
         .push_children(children.as_slice())
+        .with_children(|children| {
+            children.spawn(PbrBundle {
+                mesh: meshes.add(shape::Cylinder::default().into()),
+                material: materials.add(Color::WHITE.into()),
+                ..Default::default()
+            });
+        })
         .id();
     entity
 }
