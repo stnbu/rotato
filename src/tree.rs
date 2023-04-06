@@ -15,8 +15,8 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> (Entity, Entity) {
-    let max_children = 3;
-    let max_depth = 8;
+    let max_children = 4;
+    let max_depth = 7;
     //
     let mut rng = rand::thread_rng();
     let num_children: usize = rng.gen::<usize>() % max_children + 1;
@@ -79,7 +79,7 @@ pub fn generate_tree<'a>(
             transform,
             ..Default::default()
         })
-        .insert(Rps(rng.gen::<f32>() * TAU / 360.0 * 10.0))
+        .insert(Rps((rng.gen::<f32>() - 0.5) * TAU / 360.0 * 20.0))
         .push_children(children.as_slice())
         .id();
     (sphere, stick)
