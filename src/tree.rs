@@ -30,7 +30,7 @@ pub fn generate_tree<'a>(
     }
 
     let x: f32 = rng.gen::<f32>() * 0.2;
-    let y: f32 = 3.0 + rng.gen::<f32>() * 0.1;
+    let y: f32 = 2.0 + rng.gen::<f32>() * 0.1;
     let transform = Transform::from_translation(Vec3::Y * y + Vec3::X * x);
     let entity = commands
         .spawn(PbrBundle {
