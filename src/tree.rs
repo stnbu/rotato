@@ -11,23 +11,25 @@ pub fn generate_tree<'a>(
     commands: &'a mut Commands,
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
-) -> Entity {
-    let max_children = 3;
-    let max_depth = 3;
+) -> (Entity, Entity) {
+    let max_children = 4;
+    let max_depth = 1;
     //
     let mut rng = rand::thread_rng();
     let num_children: usize = rng.gen::<usize>() % max_children + 1;
     let mut children: Vec<Entity> = vec![];
     if depth < max_depth {
         for _ in 0..num_children {
-            children.push(generate_tree(
+            let (sphere, stick) = generate_tree(
                 depth + 1,
                 max_depth,
                 max_children,
                 commands,
                 meshes,
                 materials,
-            ));
+            );
+            children.push(sphere);
+            children.push(stick);
         }
     }
 
@@ -37,8 +39,8 @@ pub fn generate_tree<'a>(
     } else {
         Transform::from_translation(translation)
     };
-    if depth > 0 {
-        commands.spawn(PbrBundle {
+    let stick = commands
+        .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::Cylinder {
                     height: translation.length() - 1.0,
@@ -51,10 +53,10 @@ pub fn generate_tree<'a>(
             transform: Transform::from_translation(translation / 2.0)
                 .with_rotation(Quat::from_rotation_arc(Vec3::Y, translation.normalize())),
             ..Default::default()
-        });
-    }
+        })
+        .id();
 
-    let entity = commands
+    let sphere = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::UVSphere {
@@ -69,5 +71,5 @@ pub fn generate_tree<'a>(
         })
         .push_children(children.as_slice())
         .id();
-    entity
+    (sphere, stick)
 }
