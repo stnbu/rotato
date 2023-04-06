@@ -47,7 +47,7 @@ pub fn generate_tree<'a>(
             mesh: meshes.add(
                 shape::Cylinder {
                     height: translation.length() - 0.2,
-                    radius: 0.03,
+                    radius: 0.03 * 0.25,
                     ..Default::default()
                 }
                 .into(),
@@ -63,7 +63,7 @@ pub fn generate_tree<'a>(
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::UVSphere {
-                    radius: 0.25,
+                    radius: 0.25 * 0.25,
                     ..Default::default()
                 }
                 .into(),
