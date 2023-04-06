@@ -15,7 +15,7 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> (Entity, Entity) {
-    let max_children = 2;
+    let max_children = 3;
     let max_depth = 8;
     //
     let mut rng = rand::thread_rng();
