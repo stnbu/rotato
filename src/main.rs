@@ -25,15 +25,15 @@ struct CameraBoom;
 use bevy::prelude::SpatialBundle;
 
 use rand::prelude::*;
-use std::f64::consts::TAU;
-fn random_unit_vector() -> (f64, f64, f64) {
+use std::f32::consts::TAU;
+fn random_unit_vector() -> Vec3 {
     let mut rng = rand::thread_rng();
-    let theta = rng.gen::<f64>() * TAU;
-    let phi = rng.gen::<f64>() * TAU / 2.0;
+    let theta = rng.gen::<f32>() * TAU;
+    let phi = rng.gen::<f32>() * TAU / 2.0;
     let x = phi.sin() * theta.cos();
     let y = phi.sin() * theta.sin();
     let z = phi.cos();
-    (x, y, z)
+    Vec3::new(x, y, z)
 }
 
 fn spawn_camera(mut commands: Commands) {
@@ -52,24 +52,17 @@ fn spawn_camera(mut commands: Commands) {
                 },
                 CameraGimbal,
             ));
-            children.spawn(DirectionalLightBundle {
-                transform: Transform::default().looking_at(Vec3::new(1.0, 1.0, 1.0), Vec3::Y),
-                visibility: Visibility::Visible,
-                directional_light: DirectionalLight {
-                    shadows_enabled: false,
+            for _ in 0..10 {
+                children.spawn(DirectionalLightBundle {
+                    transform: Transform::default().looking_at(random_unit_vector(), Vec3::Y),
+                    visibility: Visibility::Visible,
+                    directional_light: DirectionalLight {
+                        shadows_enabled: false,
+                        ..Default::default()
+                    },
                     ..Default::default()
-                },
-                ..Default::default()
-            });
-            children.spawn(DirectionalLightBundle {
-                transform: Transform::default().looking_at(Vec3::new(-1.0, -1.0, 1.0), Vec3::Y),
-                visibility: Visibility::Visible,
-                directional_light: DirectionalLight {
-                    shadows_enabled: false,
-                    ..Default::default()
-                },
-                ..Default::default()
-            });
+                });
+            }
         });
 }
 
