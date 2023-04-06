@@ -2,13 +2,6 @@ use bevy::prelude::*;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
-#[derive(Debug, Default)]
-pub struct TreeNode {
-    pub transform: Transform,
-    pub rps: f32,
-    pub children: Vec<TreeNode>,
-}
-
 pub fn generate_tree<'a>(
     depth: i32,
     max_depth: i32,
@@ -17,6 +10,9 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> Entity {
+    let max_children = 1;
+    let max_depth = 1;
+    //
     let mut rng = rand::thread_rng();
     let num_children: usize = rng.gen::<usize>() % max_children + 1;
     let mut children: Vec<Entity> = vec![];
@@ -33,14 +29,14 @@ pub fn generate_tree<'a>(
         }
     }
 
-    let x: f32 = 1.0 + rng.gen::<f32>() * 0.2;
-    let y: f32 = 1.0 + rng.gen::<f32>() * 0.1;
+    let x: f32 = rng.gen::<f32>() * 0.2;
+    let y: f32 = 3.0 + rng.gen::<f32>() * 0.1;
     let transform = Transform::from_translation(Vec3::Y * y + Vec3::X * x);
     let entity = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::UVSphere {
-                    radius: 0.5,
+                    radius: 0.25,
                     ..Default::default()
                 }
                 .into(),
@@ -51,12 +47,6 @@ pub fn generate_tree<'a>(
         })
         .push_children(children.as_slice())
         .id();
+    warn!("Entity: {entity:?} has {} children", children.len());
     entity
-}
-
-impl TreeNode {
-    pub fn apply_children(mut self, children: Vec<TreeNode>) -> Self {
-        self.children = children;
-        self
-    }
 }

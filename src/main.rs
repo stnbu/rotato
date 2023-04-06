@@ -104,16 +104,4 @@ fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
     generate_tree(0, 4, 3, &mut commands, &mut meshes, &mut materials);
-
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(
-            shape::UVSphere {
-                radius: 0.5,
-                ..Default::default()
-            }
-            .into(),
-        ),
-        material: materials.add(Color::WHITE.into()),
-        ..Default::default()
-    });
 }
