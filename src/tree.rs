@@ -33,7 +33,7 @@ pub fn generate_tree<'a>(
         )
     };
     let relative_depth = depth as f32 / parameters.max_depth as f32;
-    let color = parameters.get_color_point(relative_depth);
+    let color = parameters.get_intermediate_color(relative_depth);
 
     // stick
     let stick = if depth == 0 {
@@ -53,7 +53,7 @@ pub fn generate_tree<'a>(
                     }
                     .into(),
                 ),
-                material: materials.add(color.into()),
+                material: materials.add(color.with_a(0.8).into()),
                 transform: Transform::from_translation(transform.translation / 2.0).with_rotation(
                     Quat::from_rotation_arc(Vec3::Y, transform.translation.normalize()),
                 ),

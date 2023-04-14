@@ -31,7 +31,7 @@ pub struct Parameters {
 }
 
 impl Parameters {
-    pub fn get_color_point(&self, position: f32) -> Color {
+    pub fn get_intermediate_color(&self, position: f32) -> Color {
         assert!(position >= 0.0 && position <= 1.0);
         let (start, end) = self.color_endpoints;
         let coefficient = position;
