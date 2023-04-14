@@ -8,6 +8,4 @@ edition = "2021"
 [dependencies]
 bevy = "0.10.1"
 rand = "0.8.5"
-
-[profile.dev.dependencies]
-bevy_prototype_debug_lines = { version = "0.10.1", features = ["3d"] }
+bevy_prototype_debug_lines = { version = "0.10.1", features = ["3d"] } # FIXME: hide behind feature.

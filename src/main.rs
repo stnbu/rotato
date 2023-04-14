@@ -30,6 +30,32 @@ pub struct Parameters {
     pub color_endpoints: (Color, Color),
 }
 
+impl Parameters {
+    fn get_color_point(&self, position: f32) -> Color {
+        assert!(position > 0.0 && position <= 1.0);
+        let (start, end) = self.color_endpoints;
+        let coefficient = position;
+        let start = [
+            coefficient * start.r(),
+            coefficient * start.g(),
+            coefficient * start.b(),
+            coefficient * start.a(),
+        ];
+        let coefficient = 1.0 - position;
+        let end = [
+            coefficient * end.r(),
+            coefficient * end.g(),
+            coefficient * end.b(),
+            coefficient * end.a(),
+        ];
+        let mut result = [0.0_f32; 4];
+        for i in 0..4 {
+            result[i] = start[i] + end[i];
+        }
+        result.into()
+    }
+}
+
 #[derive(Component)]
 struct CameraGimbal;
 
@@ -144,8 +170,7 @@ fn setup(
 ) {
     let (_, stick) = generate_tree(
         0,
-        parameters.max_depth,
-        parameters.max_children,
+        parameters.as_ref(),
         &mut commands,
         &mut meshes,
         &mut materials,

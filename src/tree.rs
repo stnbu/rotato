@@ -9,25 +9,17 @@ pub struct Rps(pub f32);
 
 pub fn generate_tree<'a>(
     depth: i32,
-    max_depth: i32,
-    max_children: usize,
+    parameters: &crate::Parameters,
     commands: &'a mut Commands,
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> (Entity, Entity) {
     let mut rng = rand::thread_rng();
-    let num_children: usize = rng.gen::<usize>() % max_children + 1;
+    let num_children: usize = rng.gen::<usize>() % parameters.max_children + 1;
     let mut children: Vec<Entity> = vec![];
-    if depth < max_depth {
+    if depth < parameters.max_depth {
         for _ in 0..num_children {
-            let (ball, stick) = generate_tree(
-                depth + 1,
-                max_depth,
-                max_children,
-                commands,
-                meshes,
-                materials,
-            );
+            let (ball, stick) = generate_tree(depth + 1, parameters, commands, meshes, materials);
             children.push(ball);
             children.push(stick);
         }
@@ -59,7 +51,7 @@ pub fn generate_tree<'a>(
                     }
                     .into(),
                 ),
-                material: materials.add(Color::GREEN.into()),
+                material: materials.add(parameters.color_endpoints.1.into()),
                 transform: Transform::from_translation(transform.translation / 2.0).with_rotation(
                     Quat::from_rotation_arc(Vec3::Y, transform.translation.normalize()),
                 ),
@@ -78,7 +70,7 @@ pub fn generate_tree<'a>(
                 }
                 .into(),
             ),
-            material: materials.add(Color::BLUE.into()),
+            material: materials.add(parameters.color_endpoints.0.into()),
             transform,
             ..Default::default()
         })
