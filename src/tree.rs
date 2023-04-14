@@ -33,14 +33,14 @@ pub fn generate_tree<'a>(
         }
     }
 
-    let translation = random_unit_vector(4.0) * (1.0 + rng.gen::<f32>());
+    let translation = random_unit_vector(4.0) / (1.0 + depth as f32 + rng.gen::<f32>());
     let transform = if depth == 0 {
         Transform::default()
     } else {
         Transform::from_translation(translation)
     };
     let radius = 0.002475;
-    let height = translation.length() - 0.2;
+    let height = translation.length();
     let stick = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
