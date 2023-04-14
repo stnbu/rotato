@@ -33,30 +33,40 @@ pub fn generate_tree<'a>(
         }
     }
 
-    let translation = random_unit_vector(4.0) / (1.0 + depth as f32 + rng.gen::<f32>());
     let transform = if depth == 0 {
         Transform::default()
     } else {
-        Transform::from_translation(translation)
+        Transform::from_translation(
+            (random_unit_vector(4.0) / (depth as f32 + rng.gen::<f32>())) * 1.3,
+        )
     };
-    let radius = 0.002475;
-    let height = translation.length();
-    let stick = commands
-        .spawn(PbrBundle {
-            mesh: meshes.add(
-                shape::Cylinder {
-                    height,
-                    radius,
-                    ..Default::default()
-                }
-                .into(),
-            ),
-            material: materials.add(Color::GREEN.into()),
-            transform: Transform::from_translation(translation / 2.0)
-                .with_rotation(Quat::from_rotation_arc(Vec3::Y, translation.normalize())),
-            ..Default::default()
-        })
-        .id();
+
+    // stick
+    let stick = if depth == 0 {
+        commands.spawn(SpatialBundle::default()).id()
+    } else {
+        let radius = 0.002475;
+        let height = transform.translation.length();
+        let height = if height > 0.0 { height } else { 1.0 };
+
+        commands
+            .spawn(PbrBundle {
+                mesh: meshes.add(
+                    shape::Cylinder {
+                        height,
+                        radius,
+                        ..Default::default()
+                    }
+                    .into(),
+                ),
+                material: materials.add(Color::GREEN.into()),
+                transform: Transform::from_translation(transform.translation / 2.0).with_rotation(
+                    Quat::from_rotation_arc(Vec3::Y, transform.translation.normalize()),
+                ),
+                ..Default::default()
+            })
+            .id()
+    };
 
     let radius = 0.05;
     let ball = commands
