@@ -20,7 +20,7 @@ pub fn generate_tree<'a>(
     let mut children: Vec<Entity> = vec![];
     if depth < max_depth {
         for _ in 0..num_children {
-            let (sphere, stick) = generate_tree(
+            let (ball, stick) = generate_tree(
                 depth + 1,
                 max_depth,
                 max_children,
@@ -28,7 +28,7 @@ pub fn generate_tree<'a>(
                 meshes,
                 materials,
             );
-            children.push(sphere);
+            children.push(ball);
             children.push(stick);
         }
     }
@@ -59,7 +59,7 @@ pub fn generate_tree<'a>(
         .id();
 
     let radius = 0.05;
-    let sphere = commands
+    let ball = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::UVSphere {
@@ -77,7 +77,7 @@ pub fn generate_tree<'a>(
             * (depth as f32).powi(2)))
         .push_children(children.as_slice())
         .id();
-    (sphere, stick)
+    (ball, stick)
 }
 
 #[derive(Resource, Default)]
