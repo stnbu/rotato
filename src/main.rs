@@ -2,11 +2,15 @@ use bevy::{
     input::mouse::{MouseMotion, MouseWheel},
     prelude::*,
 };
+use bevy_prototype_debug_lines::DebugLinesPlugin;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
 mod tree;
 use tree::*;
+
+mod debug_lines;
+use debug_lines::*;
 
 const EPSILON: f32 = 0.00001;
 
@@ -19,9 +23,11 @@ struct CameraBoom;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
+        .add_plugin(DebugLinesPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(spawn_camera)
         .add_system(rotate)
+        .add_system(debug_lines)
         .add_system(control)
         .run();
 }
@@ -29,7 +35,7 @@ fn main() {
 fn random_unit_vector() -> Vec3 {
     let mut rng = rand::thread_rng();
     let theta = rng.gen::<f32>() * TAU;
-    let phi = rng.gen::<f32>() * TAU / 2.0;
+    let phi = rng.gen::<f32>() * TAU / 2.0 * 0.001;
     let x = phi.sin() * theta.cos();
     let y = phi.sin() * theta.sin();
     let z = phi.cos();
