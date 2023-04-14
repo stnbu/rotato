@@ -32,6 +32,8 @@ pub fn generate_tree<'a>(
             (random_unit_vector(4.0) / (depth as f32 + rng.gen::<f32>())) * 2.0,
         )
     };
+    let relative_depth = depth as f32 / parameters.max_depth as f32;
+    let color = parameters.get_color_point(relative_depth);
 
     // stick
     let stick = if depth == 0 {
@@ -51,7 +53,7 @@ pub fn generate_tree<'a>(
                     }
                     .into(),
                 ),
-                material: materials.add(parameters.color_endpoints.1.into()),
+                material: materials.add(color.into()),
                 transform: Transform::from_translation(transform.translation / 2.0).with_rotation(
                     Quat::from_rotation_arc(Vec3::Y, transform.translation.normalize()),
                 ),
@@ -70,7 +72,7 @@ pub fn generate_tree<'a>(
                 }
                 .into(),
             ),
-            material: materials.add(parameters.color_endpoints.0.into()),
+            material: materials.add(color.into()),
             transform,
             ..Default::default()
         })
