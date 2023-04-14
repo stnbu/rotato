@@ -27,7 +27,7 @@ fn main() {
         .add_plugin(DebugLinesPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(spawn_camera)
-        .add_startup_system(setup_debug_lines)
+        //.add_startup_system(setup_debug_lines)
         .add_system(rotate)
         .add_system(toggle_rotation)
         .add_system(control)
@@ -54,8 +54,8 @@ fn spawn_camera(mut commands: Commands) {
         .with_children(|children| {
             children.spawn((
                 Camera3dBundle {
-                    transform: Transform::from_translation(Vec3::Z * 5.0)
-                        .looking_at(Vec3::ZERO, Vec3::Y),
+                    transform: Transform::from_translation(Vec3::Z * 10.0)
+                        .looking_at(Vec3::Y * 3.0, Vec3::Y),
                     ..Default::default()
                 },
                 CameraGimbal,
