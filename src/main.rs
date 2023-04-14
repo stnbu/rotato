@@ -66,7 +66,7 @@ fn main() {
     let mut app = App::new();
     app.insert_resource(Parameters {
         max_children: 4,
-        max_depth: 4,
+        max_depth: 5,
         color_endpoints: (Color::rgb_u8(139, 69, 19), Color::GREEN),
     })
     .insert_resource(Rotating::default())

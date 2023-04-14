@@ -53,7 +53,7 @@ pub fn generate_tree<'a>(
                     }
                     .into(),
                 ),
-                material: materials.add(color.with_a(0.7).into()),
+                material: materials.add(color.with_a(0.2).into()),
                 transform: Transform::from_translation(transform.translation / 2.0).with_rotation(
                     Quat::from_rotation_arc(Vec3::Y, transform.translation.normalize()),
                 ),
