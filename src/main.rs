@@ -34,14 +34,14 @@ impl Parameters {
     pub fn get_intermediate_color(&self, position: f32) -> Color {
         assert!(position >= 0.0 && position <= 1.0);
         let (start, end) = self.color_endpoints;
-        let coefficient = position;
+        let coefficient = 1.0 - position;
         let start = [
             coefficient * start.r(),
             coefficient * start.g(),
             coefficient * start.b(),
             coefficient * start.a(),
         ];
-        let coefficient = 1.0 - position;
+        let coefficient = position;
         let end = [
             coefficient * end.r(),
             coefficient * end.g(),
@@ -67,7 +67,7 @@ fn main() {
     app.insert_resource(Parameters {
         max_children: 4,
         max_depth: 4,
-        color_endpoints: (Color::BLUE, Color::GREEN),
+        color_endpoints: (Color::rgb_u8(139, 69, 19), Color::GREEN),
     })
     .insert_resource(Rotating::default())
     .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
