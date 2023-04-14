@@ -14,6 +14,19 @@ use debug_lines::*;
 
 const EPSILON: f32 = 0.00001;
 
+// // MAYBE: Make some "Parameters" a function (`Fn`) of this.
+struct Context {
+    depth: i32,
+    parent: Entity,
+}
+
+#[derive(Resource, Default)]
+pub struct Parameters {
+    pub max_children: usize,
+    pub max_depth: i32,
+    pub color_endpoints: (Color, Color),
+}
+
 #[derive(Component)]
 struct CameraGimbal;
 
@@ -22,6 +35,11 @@ struct CameraBoom;
 
 fn main() {
     App::new()
+        .insert_resource(Parameters {
+            max_children: 4,
+            max_depth: 4,
+            color_endpoints: (Color::BLUE, Color::GREEN),
+        })
         .insert_resource(Rotating::default())
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(DebugLinesPlugin::default())
@@ -116,7 +134,15 @@ fn setup(
     mut commands: Commands,
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
+    parameters: Res<Parameters>,
 ) {
-    let (_, stick) = generate_tree(0, 4, 5, &mut commands, &mut meshes, &mut materials);
+    let (_, stick) = generate_tree(
+        0,
+        parameters.max_depth,
+        parameters.max_children,
+        &mut commands,
+        &mut meshes,
+        &mut materials,
+    );
     commands.entity(stick).despawn();
 }
