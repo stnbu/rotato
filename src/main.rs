@@ -117,5 +117,6 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    generate_tree(0, 4, 4, &mut commands, &mut meshes, &mut materials);
+    let (_, stick) = generate_tree(0, 4, 4, &mut commands, &mut meshes, &mut materials);
+    commands.entity(stick).despawn();
 }

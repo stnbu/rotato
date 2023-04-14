@@ -39,23 +39,18 @@ pub fn generate_tree<'a>(
     } else {
         Transform::from_translation(translation)
     };
-    // ssostupid
-    let visibility = if depth == 0 {
-        Visibility::Hidden
-    } else {
-        Visibility::Visible
-    };
+    let radius = 0.002475;
+    let height = translation.length() - 0.2;
     let stick = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::Cylinder {
-                    height: translation.length() - 0.2,
-                    radius: 0.03 * 0.25,
+                    height,
+                    radius,
                     ..Default::default()
                 }
                 .into(),
             ),
-            visibility,
             material: materials.add(Color::GREEN.into()),
             transform: Transform::from_translation(translation / 2.0)
                 .with_rotation(Quat::from_rotation_arc(Vec3::Y, translation.normalize())),
@@ -63,11 +58,12 @@ pub fn generate_tree<'a>(
         })
         .id();
 
+    let radius = 0.05;
     let sphere = commands
         .spawn(PbrBundle {
             mesh: meshes.add(
                 shape::UVSphere {
-                    radius: 0.25 * 0.25,
+                    radius,
                     ..Default::default()
                 }
                 .into(),
