@@ -2,11 +2,19 @@ use bevy::{
     input::mouse::{MouseMotion, MouseWheel},
     prelude::*,
 };
+use rand::prelude::*;
+use std::f32::consts::TAU;
 
 mod tree;
 use tree::*;
 
 const EPSILON: f32 = 0.00001;
+
+#[derive(Component)]
+struct CameraGimbal;
+
+#[derive(Component)]
+struct CameraBoom;
 
 fn main() {
     App::new()
@@ -18,15 +26,6 @@ fn main() {
         .run();
 }
 
-#[derive(Component)]
-struct CameraGimbal;
-
-#[derive(Component)]
-struct CameraBoom;
-use bevy::prelude::SpatialBundle;
-
-use rand::prelude::*;
-use std::f32::consts::TAU;
 fn random_unit_vector() -> Vec3 {
     let mut rng = rand::thread_rng();
     let theta = rng.gen::<f32>() * TAU;
@@ -110,5 +109,5 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    generate_tree(0, 6, 4, &mut commands, &mut meshes, &mut materials);
+    generate_tree(0, 5, 3, &mut commands, &mut meshes, &mut materials);
 }
