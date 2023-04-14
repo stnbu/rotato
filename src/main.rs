@@ -2,14 +2,17 @@ use bevy::{
     input::mouse::{MouseMotion, MouseWheel},
     prelude::*,
 };
-use bevy_prototype_debug_lines::DebugLinesPlugin;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
 mod tree;
 use tree::*;
 
+#[cfg(debug_assertions)]
 mod debug_lines;
+#[cfg(debug_assertions)]
+use bevy_prototype_debug_lines::DebugLinesPlugin;
+#[cfg(debug_assertions)]
 use debug_lines::*;
 
 const EPSILON: f32 = 0.00001;
@@ -34,22 +37,25 @@ struct CameraGimbal;
 struct CameraBoom;
 
 fn main() {
-    App::new()
-        .insert_resource(Parameters {
-            max_children: 4,
-            max_depth: 4,
-            color_endpoints: (Color::BLUE, Color::GREEN),
-        })
-        .insert_resource(Rotating::default())
-        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-        .add_plugin(DebugLinesPlugin::default())
-        .add_startup_system(setup)
-        .add_startup_system(spawn_camera)
-        //.add_startup_system(setup_debug_lines)
-        .add_system(rotate)
-        .add_system(toggle_rotation)
-        .add_system(control)
-        .run();
+    let mut app = App::new();
+    app.insert_resource(Parameters {
+        max_children: 4,
+        max_depth: 4,
+        color_endpoints: (Color::BLUE, Color::GREEN),
+    })
+    .insert_resource(Rotating::default())
+    .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
+    .add_startup_system(setup)
+    .add_startup_system(spawn_camera)
+    .add_system(rotate)
+    .add_system(toggle_rotation)
+    .add_system(control);
+    #[cfg(debug_assertions)]
+    {
+        app.add_startup_system(setup_debug_lines);
+        app.add_plugin(DebugLinesPlugin::default());
+    }
+    app.run();
 }
 
 fn random_unit_vector(y_bias: f32) -> Vec3 {
