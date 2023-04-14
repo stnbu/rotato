@@ -26,8 +26,8 @@ fn main() {
         .add_plugin(DebugLinesPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(spawn_camera)
+        .add_startup_system(setup_debug_lines)
         .add_system(rotate)
-        .add_system(debug_lines)
         .add_system(control)
         .run();
 }
