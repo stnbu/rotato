@@ -33,7 +33,7 @@ pub fn generate_tree<'a>(
         }
     }
 
-    let translation = random_unit_vector() * (1.0 + rng.gen::<f32>());
+    let translation = random_unit_vector(10.0) * (1.0 + rng.gen::<f32>());
     let transform = if depth == 0 {
         Transform::default()
     } else {
@@ -84,9 +84,24 @@ pub fn generate_tree<'a>(
     (sphere, stick)
 }
 
-pub fn rotate(mut rotations: Query<(&mut Transform, &Rps)>, time: Res<Time>) {
-    for (mut transform, &Rps(rps)) in rotations.iter_mut() {
-        let delta_s = time.delta_seconds();
-        transform.rotate_y(rps * delta_s);
+#[derive(Resource, Default)]
+pub struct Rotating(pub bool);
+
+pub fn toggle_rotation(keys: Res<Input<KeyCode>>, mut rotating: ResMut<Rotating>) {
+    if keys.just_pressed(KeyCode::Space) {
+        rotating.0 = !rotating.0;
+    }
+}
+
+pub fn rotate(
+    rotating: Res<Rotating>,
+    mut rotations: Query<(&mut Transform, &Rps)>,
+    time: Res<Time>,
+) {
+    if rotating.0 {
+        for (mut transform, &Rps(rps)) in rotations.iter_mut() {
+            let delta_s = time.delta_seconds();
+            transform.rotate_y(rps * delta_s);
+        }
     }
 }

@@ -22,23 +22,25 @@ struct CameraBoom;
 
 fn main() {
     App::new()
+        .insert_resource(Rotating::default())
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugin(DebugLinesPlugin::default())
         .add_startup_system(setup)
         .add_startup_system(spawn_camera)
         .add_startup_system(setup_debug_lines)
         .add_system(rotate)
+        .add_system(toggle_rotation)
         .add_system(control)
         .run();
 }
 
-fn random_unit_vector() -> Vec3 {
+fn random_unit_vector(y_bias: f32) -> Vec3 {
     let mut rng = rand::thread_rng();
     let theta = rng.gen::<f32>() * TAU;
-    let phi = rng.gen::<f32>() * TAU / 2.0 * 0.001;
+    let phi = rng.gen::<f32>() * TAU / 2.0 / y_bias;
     let x = phi.sin() * theta.cos();
-    let y = phi.sin() * theta.sin();
-    let z = phi.cos();
+    let y = phi.cos();
+    let z = phi.sin() * theta.sin();
     Vec3::new(x, y, z)
 }
 
@@ -60,7 +62,7 @@ fn spawn_camera(mut commands: Commands) {
             ));
             for _ in 0..5 {
                 children.spawn(DirectionalLightBundle {
-                    transform: Transform::default().looking_at(random_unit_vector(), Vec3::Y),
+                    transform: Transform::default().looking_at(random_unit_vector(1.0), Vec3::Y),
                     visibility: Visibility::Visible,
                     directional_light: DirectionalLight {
                         shadows_enabled: false,
