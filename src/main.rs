@@ -18,10 +18,10 @@ use debug_lines::*;
 const EPSILON: f32 = 0.00001;
 
 // // MAYBE: Make some "Parameters" a function (`Fn`) of this.
-struct Context {
-    depth: i32,
-    parent: Entity,
-}
+// struct Context {
+//     depth: i32,
+//     parent: Entity,
+// }
 
 #[derive(Resource, Default)]
 pub struct Parameters {
