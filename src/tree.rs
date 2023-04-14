@@ -37,7 +37,7 @@ pub fn generate_tree<'a>(
         Transform::default()
     } else {
         Transform::from_translation(
-            (random_unit_vector(4.0) / (depth as f32 + rng.gen::<f32>())) * 1.3,
+            (random_unit_vector(4.0) / (depth as f32 + rng.gen::<f32>())) * 2.0,
         )
     };
 
