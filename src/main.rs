@@ -2,11 +2,15 @@ use bevy::{
     input::mouse::{MouseMotion, MouseWheel},
     prelude::*,
 };
+use bevy_egui::EguiPlugin;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
 mod tree;
 use tree::*;
+
+mod gui;
+use gui::*;
 
 #[cfg(debug_assertions)]
 mod debug_lines;
@@ -22,6 +26,9 @@ const EPSILON: f32 = 0.00001;
 //     depth: i32,
 //     parent: Entity,
 // }
+
+#[derive(Component)]
+struct RotRate(u32);
 
 #[derive(Resource, Default)]
 pub struct Parameters {
@@ -61,28 +68,6 @@ struct CameraGimbal;
 
 #[derive(Component)]
 struct CameraBoom;
-
-fn main() {
-    let mut app = App::new();
-    app.insert_resource(Parameters {
-        max_children: 4,
-        max_depth: 5,
-        color_endpoints: (Color::rgb_u8(139, 69, 19), Color::GREEN),
-    })
-    .insert_resource(Rotating::default())
-    .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-    .add_startup_system(setup)
-    .add_startup_system(spawn_camera)
-    .add_system(rotate)
-    .add_system(toggle_rotation)
-    .add_system(control);
-    #[cfg(debug_assertions)]
-    {
-        app.add_startup_system(setup_debug_lines);
-        app.add_plugin(DebugLinesPlugin::default());
-    }
-    app.run();
-}
 
 fn random_unit_vector(y_bias: f32) -> Vec3 {
     let mut rng = rand::thread_rng();
@@ -159,9 +144,6 @@ fn control(
     }
 }
 
-#[derive(Component)]
-struct RotRate(u32);
-
 fn setup(
     mut commands: Commands,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -176,4 +158,30 @@ fn setup(
         &mut materials,
     );
     commands.entity(stick).despawn();
+}
+
+fn main() {
+    let mut app = App::new();
+    app.insert_resource(Parameters {
+        max_children: 4,
+        max_depth: 5,
+        color_endpoints: (Color::rgb_u8(139, 69, 19), Color::GREEN),
+    })
+    .insert_resource(Rotating::default())
+    .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
+    .add_plugin(EguiPlugin)
+    // -
+    .add_startup_system(setup)
+    .add_startup_system(spawn_camera)
+    // -
+    .add_system(ui_example_system)
+    .add_system(rotate)
+    .add_system(toggle_rotation)
+    .add_system(control);
+    #[cfg(debug_assertions)]
+    {
+        app.add_startup_system(setup_debug_lines);
+        app.add_plugin(DebugLinesPlugin::default());
+    }
+    app.run();
 }
