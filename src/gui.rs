@@ -2,8 +2,6 @@ use crate::Parameters;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
 
-// egui::widgets::color_picker::color_edit_button_rgb
-
 pub fn menu(
     mut contexts: EguiContexts,
     mut parameters: ResMut<Parameters>,
@@ -12,12 +10,20 @@ pub fn menu(
     if parameters.is_added() {
         *pending_parameters = *parameters;
     }
+    let b_key = '🅱';
+    let g_key = '🅶'; // wat!!? ... or \u{1F176}, both just an empty square in egui.
+    let plus = '\u{002B}';
+    let mouse = '\u{1f5B1}';
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
         ui.hyperlink_to("It's RoTAto!!", "https://github.com/stnbu/rotato");
         ui.add(egui::Separator::default());
         ui.label("mouse scroll = move camera toward/away from origin");
-        ui.label("\"b\" + mouse = rotate camera [b]oom about origin");
-        ui.label("\"g\" + mouse = [g]imbal camera (look around)");
+        ui.label(format!(
+            "{b_key} {plus} {mouse} = rotate camera [b]oom about origin"
+        ));
+        ui.label(format!(
+            "{g_key} {plus} {mouse} = [g]imbal camera (look around)"
+        ));
         ui.label("SPACE = (un)pause rotation ");
         ui.add(egui::Separator::default());
         // -
