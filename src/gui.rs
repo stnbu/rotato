@@ -11,7 +11,18 @@ pub fn menu(
         *pending_parameters = *parameters;
     }
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
+        /*
+            pub max_children: usize,
+            pub max_depth: i32,
+            pub color_endpoints: (Color, Color),
+            pub y_bias: f32,
+        */
         ui.add(egui::Slider::new(&mut pending_parameters.y_bias, 0.0..=7.0).text("Y-bias"));
+        ui.add(
+            egui::Slider::new(&mut pending_parameters.max_children, 1..=10).text("Max Children"),
+        );
+        ui.add(egui::Slider::new(&mut pending_parameters.max_depth, 1..=10).text("Max Depth"));
+
         if ui.add(egui::Button::new("Apply")).clicked() {
             *parameters = *pending_parameters;
         }
