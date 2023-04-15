@@ -15,7 +15,10 @@ pub fn menu(
 
         // -
         if ui.add(egui::Button::new("Apply")).clicked() {
-            // -
+            *parameters = *pending_parameters;
+        }
+        if ui.add(egui::Button::new("Reset")).clicked() {
+            *pending_parameters = *parameters;
         }
     });
 }
