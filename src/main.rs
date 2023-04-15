@@ -30,11 +30,12 @@ const EPSILON: f32 = 0.00001;
 #[derive(Component)]
 struct RotRate(u32);
 
-#[derive(Resource, Default)]
+#[derive(Resource, Default, Copy, Clone)]
 pub struct Parameters {
     pub max_children: usize,
     pub max_depth: i32,
     pub color_endpoints: (Color, Color),
+    pub y_bias: f32,
 }
 
 impl Parameters {
@@ -149,15 +150,19 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
     parameters: Res<Parameters>,
+    tree_entities: Query<Entity, With<Tree>>,
 ) {
-    let (_, stick) = generate_tree(
-        0,
-        parameters.as_ref(),
-        &mut commands,
-        &mut meshes,
-        &mut materials,
-    );
-    commands.entity(stick).despawn();
+    if parameters.is_added() || parameters.is_changed() {
+        tree_entities.for_each(|e| commands.entity(e).despawn_recursive());
+        let (_, stick) = generate_tree(
+            0,
+            parameters.as_ref(),
+            &mut commands,
+            &mut meshes,
+            &mut materials,
+        );
+        commands.entity(stick).despawn();
+    }
 }
 
 fn main() {
@@ -166,6 +171,7 @@ fn main() {
         max_children: 4,
         max_depth: 5,
         color_endpoints: (Color::rgb_u8(139, 69, 19), Color::GREEN),
+        y_bias: 5.0,
     })
     .insert_resource(Rotating::default())
     .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
@@ -174,7 +180,7 @@ fn main() {
     .add_startup_system(setup)
     .add_startup_system(spawn_camera)
     // -
-    .add_system(ui_example_system)
+    .add_system(menu)
     .add_system(rotate)
     .add_system(toggle_rotation)
     .add_system(control);

@@ -2,10 +2,13 @@ use bevy::prelude::*;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
-use crate::random_unit_vector;
+use crate::{random_unit_vector, Parameters};
 
 #[derive(Component)]
 pub struct Rps(pub f32);
+
+#[derive(Component)]
+pub struct Tree;
 
 pub fn generate_tree<'a>(
     depth: i32,
@@ -29,7 +32,7 @@ pub fn generate_tree<'a>(
         Transform::default()
     } else {
         Transform::from_translation(
-            (random_unit_vector(4.0) / (depth as f32 + rng.gen::<f32>())) * 2.0,
+            (random_unit_vector(parameters.y_bias) / (depth as f32 + rng.gen::<f32>())) * 2.0,
         )
     };
     let relative_depth = depth as f32 / parameters.max_depth as f32;
@@ -59,6 +62,7 @@ pub fn generate_tree<'a>(
                 ),
                 ..Default::default()
             })
+            .insert(Tree)
             .id()
     };
 
@@ -80,6 +84,7 @@ pub fn generate_tree<'a>(
             * 20.0
             * (depth as f32).powi(2)))
         .push_children(children.as_slice())
+        .insert(Tree)
         .id();
     (ball, stick)
 }

@@ -1,9 +1,22 @@
+use crate::Parameters;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts, EguiPlugin};
 
-pub fn ui_example_system(mut contexts: EguiContexts) {
-    egui::Window::new("Hello").show(contexts.ctx_mut(), |ui| {
-        ui.label("world");
+pub fn menu(
+    mut contexts: EguiContexts,
+    mut parameters: ResMut<Parameters>,
+    mut pending_parameters: Local<Parameters>,
+) {
+    if parameters.is_added() {
+        *pending_parameters = *parameters;
+    }
+    egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
+        ui.add(egui::Slider::new(&mut pending_parameters.y_bias, 0.0..=7.0).text("Y-bias"));
+
+        // -
+        if ui.add(egui::Button::new("Apply")).clicked() {
+            // -
+        }
     });
 }
 
