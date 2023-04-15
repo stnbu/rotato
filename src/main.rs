@@ -12,13 +12,6 @@ use tree::*;
 mod gui;
 use gui::*;
 
-#[cfg(debug_assertions)]
-mod debug_lines;
-#[cfg(debug_assertions)]
-use bevy_prototype_debug_lines::DebugLinesPlugin;
-#[cfg(debug_assertions)]
-use debug_lines::*;
-
 const EPSILON: f32 = 0.00001;
 
 // // MAYBE: Make some "Parameters" a function (`Fn`) of this.
@@ -184,10 +177,6 @@ fn main() {
     .add_system(rotate)
     .add_system(toggle_rotation)
     .add_system(control);
-    #[cfg(debug_assertions)]
-    {
-        app.add_startup_system(setup_debug_lines);
-        app.add_plugin(DebugLinesPlugin::default());
-    }
+    // -
     app.run();
 }
