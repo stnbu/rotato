@@ -19,16 +19,23 @@ pub fn menu(
         );
         ui.add(egui::Slider::new(&mut pending_parameters.max_depth, 1..=10).text("Max Depth"));
 
-        let mut color = [0.0, 1.0, 0.0];
         ui.horizontal(|ui| {
+            let [r, g, b, a] = pending_parameters.color_endpoints.0.as_rgba_f32();
+            let mut rgba = egui::Rgba::from_rgba_unmultiplied(r, g, b, a);
             ui.label("Start Color:");
-            egui::color_picker::color_edit_button_rgb(ui, &mut color);
+            egui::color_picker::color_edit_button_rgba(
+                ui,
+                &mut rgba,
+                egui::color_picker::Alpha::BlendOrAdditive,
+            );
+            let [r, g, b, a] = rgba.to_array();
+            pending_parameters.color_endpoints.0 = Color::rgba(r, g, b, a);
         });
-        let mut color2 = [1.0, 0.0, 0.0];
-        ui.horizontal(|ui| {
-            ui.label("End Color:");
-            egui::color_picker::color_edit_button_rgb(ui, &mut color2);
-        });
+        // let mut color2 = [1.0, 0.0, 0.0];
+        // ui.horizontal(|ui| {
+        //     ui.label("End Color:");
+        //     egui::color_picker::color_edit_button_rgb(ui, &mut color2);
+        // });
         // -
         if ui.add(egui::Button::new("Apply")).clicked() {
             *parameters = *pending_parameters;
