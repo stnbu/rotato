@@ -13,6 +13,9 @@ pub fn menu(
         *pending_parameters = *parameters;
     }
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
+        ui.hyperlink_to("It's RoTAto!!", "https://github.com/stnbu/rotato");
+        ui.add(egui::Separator::default());
+        ui.label("mouse scroll = move camera toward/away from origin");
         ui.label("\"b\" + mouse = rotate camera [b]oom about origin");
         ui.label("\"g\" + mouse = [g]imbal camera (look around)");
         ui.label("SPACE = (un)pause rotation ");
