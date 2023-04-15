@@ -2810,6 +2810,7 @@ dependencies = [
  "bevy",
  "bevy_egui",
  "rand",
+ "web-sys",
 ]
 
 [[package]]

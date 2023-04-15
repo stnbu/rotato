@@ -9,3 +9,18 @@ edition = "2021"
 bevy = "0.10.1"
 rand = "0.8.5"
 bevy_egui = "0.20.2"
+web-sys = { version = "0.3.61", features = ["Window"] }
+
+[profile.release]
+opt-level = "s"
+lto = "thin"
+
+[[bin]]
+name = "index"
+path = "src/main.rs"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
