@@ -12,6 +12,9 @@ use tree::*;
 mod gui;
 use gui::*;
 
+// mod dump_pixels;
+// use dump_pixels::*;
+
 const EPSILON: f32 = 0.00001;
 
 // // MAYBE: Make some "Parameters" a function (`Fn`) of this.
