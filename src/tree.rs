@@ -2,8 +2,6 @@ use bevy::prelude::*;
 use rand::prelude::*;
 use std::f32::consts::TAU;
 
-use crate::{random_unit_vector, Parameters};
-
 #[derive(Component)]
 pub struct Rps(pub f32);
 
@@ -32,7 +30,8 @@ pub fn generate_tree<'a>(
         Transform::default()
     } else {
         Transform::from_translation(
-            (random_unit_vector(parameters.y_bias) / (depth as f32 + rng.gen::<f32>())) * 2.0,
+            (crate::random_unit_vector(parameters.y_bias) / (depth as f32 + rng.gen::<f32>()))
+                * 2.0,
         )
     };
     let relative_depth = depth as f32 / parameters.max_depth as f32;

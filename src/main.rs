@@ -149,7 +149,7 @@ fn redraw_tree(
     tree_entities: Query<Entity, With<Tree>>,
 ) {
     if parameters.is_added() || parameters.is_changed() {
-        tree_entities.for_each(|e| commands.entity(e).despawn_recursive());
+        tree_entities.for_each(|e| commands.entity(e).despawn());
         let (_, stick) = generate_tree(
             0,
             parameters.as_ref(),
