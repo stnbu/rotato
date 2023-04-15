@@ -12,8 +12,6 @@ pub fn menu(
     }
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
         ui.add(egui::Slider::new(&mut pending_parameters.y_bias, 0.0..=7.0).text("Y-bias"));
-
-        // -
         if ui.add(egui::Button::new("Apply")).clicked() {
             *parameters = *pending_parameters;
         }

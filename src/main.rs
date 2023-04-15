@@ -145,7 +145,7 @@ fn control(
     }
 }
 
-fn setup(
+fn redraw_tree(
     mut commands: Commands,
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -177,9 +177,9 @@ fn main() {
     .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
     .add_plugin(EguiPlugin)
     // -
-    .add_startup_system(setup)
     .add_startup_system(spawn_camera)
     // -
+    .add_system(redraw_tree)
     .add_system(menu)
     .add_system(rotate)
     .add_system(toggle_rotation)
