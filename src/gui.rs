@@ -2,6 +2,8 @@ use crate::Parameters;
 use bevy::prelude::*;
 use bevy_egui::{egui, EguiContexts};
 
+// egui::widgets::color_picker::color_edit_button_rgb
+
 pub fn menu(
     mut contexts: EguiContexts,
     mut parameters: ResMut<Parameters>,
@@ -17,6 +19,17 @@ pub fn menu(
         );
         ui.add(egui::Slider::new(&mut pending_parameters.max_depth, 1..=10).text("Max Depth"));
 
+        let mut color = [0.0, 1.0, 0.0];
+        ui.horizontal(|ui| {
+            ui.label("Start Color:");
+            egui::color_picker::color_edit_button_rgb(ui, &mut color);
+        });
+        let mut color2 = [1.0, 0.0, 0.0];
+        ui.horizontal(|ui| {
+            ui.label("End Color:");
+            egui::color_picker::color_edit_button_rgb(ui, &mut color2);
+        });
+        // -
         if ui.add(egui::Button::new("Apply")).clicked() {
             *parameters = *pending_parameters;
         }
@@ -25,46 +38,3 @@ pub fn menu(
         }
     });
 }
-
-/*
-use crate::Parameters;
-use bevy::{prelude::*, render::camera::Projection, window::PrimaryWindow};
-use bevy_egui::{egui, EguiContexts, EguiPlugin};
-
-pub fn gui(mut contexts: EguiContexts, mut occupied_screen_space: ResMut<Parameters>) {
-    let ctx = contexts.ctx_mut();
-
-    occupied_screen_space.left = egui::SidePanel::left("left_panel")
-        .resizable(true)
-        .show(ctx, |ui| {
-            ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
-        })
-        .response
-        .rect
-        .width();
-    occupied_screen_space.right = egui::SidePanel::right("right_panel")
-        .resizable(true)
-        .show(ctx, |ui| {
-            ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
-        })
-        .response
-        .rect
-        .width();
-    occupied_screen_space.top = egui::TopBottomPanel::top("top_panel")
-        .resizable(true)
-        .show(ctx, |ui| {
-            ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
-        })
-        .response
-        .rect
-        .height();
-    occupied_screen_space.bottom = egui::TopBottomPanel::bottom("bottom_panel")
-        .resizable(true)
-        .show(ctx, |ui| {
-            ui.allocate_rect(ui.available_rect_before_wrap(), egui::Sense::hover());
-        })
-        .response
-        .rect
-        .height();
-}
-*/
