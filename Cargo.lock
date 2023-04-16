@@ -2809,6 +2809,7 @@ version = "0.2.0"
 dependencies = [
  "bevy",
  "bevy_egui",
+ "lazy_static",
  "rand",
  "web-sys",
 ]

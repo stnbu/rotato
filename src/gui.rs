@@ -62,11 +62,13 @@ pub fn menu(
             pending_parameters.color_endpoints.1 = Color::rgba(r, g, b, a);
         });
         ui.add(egui::Separator::default());
-        if ui.add(egui::Button::new("Apply")).clicked() {
-            *parameters = *pending_parameters;
-        }
-        if ui.add(egui::Button::new("Reset")).clicked() {
-            *pending_parameters = *parameters;
-        }
+        ui.horizontal(|ui| {
+            if ui.add(egui::Button::new("Apply")).clicked() {
+                *parameters = *pending_parameters;
+            }
+            if ui.add(egui::Button::new("Cancel")).clicked() {
+                *pending_parameters = *parameters;
+            }
+        });
     });
 }

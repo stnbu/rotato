@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use rand::prelude::*;
 use std::f32::consts::TAU;
 
 #[derive(Component)]
@@ -15,8 +14,7 @@ pub fn generate_tree<'a>(
     meshes: &'a mut ResMut<Assets<Mesh>>,
     materials: &'a mut ResMut<Assets<StandardMaterial>>,
 ) -> (Entity, Entity) {
-    let mut rng = rand::thread_rng();
-    let num_children: usize = rng.gen::<usize>() % parameters.max_children + 1;
+    let num_children: usize = crate::random::gen::<usize>() % parameters.max_children + 1;
     let mut children: Vec<Entity> = vec![];
     if depth < parameters.max_depth {
         for _ in 0..num_children {
@@ -30,7 +28,8 @@ pub fn generate_tree<'a>(
         Transform::default()
     } else {
         Transform::from_translation(
-            (crate::random_unit_vector(parameters.y_bias) / (depth as f32 + rng.gen::<f32>()))
+            (crate::random_unit_vector(parameters.y_bias)
+                / (depth as f32 + crate::random::gen::<f32>()))
                 * 2.0,
         )
     };
@@ -79,7 +78,7 @@ pub fn generate_tree<'a>(
             transform,
             ..Default::default()
         })
-        .insert(Rps((rng.gen::<f32>() - 0.5) * TAU / 360.0
+        .insert(Rps((crate::random::gen::<f32>() - 0.5) * TAU / 360.0
             * 20.0
             * (depth as f32).powi(2)))
         .push_children(children.as_slice())

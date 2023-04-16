@@ -3,7 +3,6 @@ use bevy::{
     prelude::*,
 };
 use bevy_egui::EguiPlugin;
-use rand::prelude::*;
 use std::f32::consts::TAU;
 
 mod tree;
@@ -11,6 +10,8 @@ use tree::*;
 
 mod gui;
 use gui::*;
+
+mod random;
 
 const EPSILON: f32 = 0.00001;
 
@@ -55,9 +56,8 @@ struct CameraGimbal;
 struct CameraBoom;
 
 fn random_unit_vector(y_bias: f32) -> Vec3 {
-    let mut rng = rand::thread_rng();
-    let theta = rng.gen::<f32>() * TAU;
-    let phi = rng.gen::<f32>() * TAU / 2.0 / y_bias;
+    let theta = random::gen::<f32>() * TAU;
+    let phi = random::gen::<f32>() * TAU / 2.0 / y_bias;
     let x = phi.sin() * theta.cos();
     let y = phi.cos();
     let z = phi.sin() * theta.sin();
