@@ -27,7 +27,6 @@ pub fn menu(
         ));
         ui.label("SPACE {right_arrow} (un)pause rotation ");
         ui.add(egui::Separator::default());
-        // -
         ui.add(egui::Slider::new(&mut pending_parameters.y_bias, 0.0..=7.0).text("Y-bias"));
         ui.add(
             egui::Slider::new(&mut pending_parameters.max_children, 1..=10).text("Max Children"),

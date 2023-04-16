@@ -160,14 +160,11 @@ fn main() {
     .insert_resource(Rotating::default())
     .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
     .add_plugin(EguiPlugin)
-    // -
     .add_startup_system(spawn_camera)
-    // -
     .add_system(redraw_tree)
     .add_system(menu)
     .add_system(rotate)
     .add_system(toggle_rotation)
     .add_system(control);
-    // -
     app.run();
 }
