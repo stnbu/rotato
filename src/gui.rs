@@ -11,20 +11,30 @@ pub fn menu(
         *pending_parameters = *parameters;
     }
     let b_key = '🅱';
-    let g_key = '🅶'; // wat!!? ... or \u{1F176}, both just an empty square in egui.
+    // Both the below literal g-keycap character below as well as
+    // its (according to python) ord "\u{1F176}" do not work
+    // and show up i egui as an empty square. YET, the above
+    // b-keycap does work! Leaving as-is to garner sympathy.
+    let g_key = '🅶';
     let plus = '\u{002B}';
     let mouse = '\u{1f5B1}';
+    // // egui sure has a lot of empty squares. These do not work:
+    // let right_arrow = '→';
+    // let right_arrow = '⇰';
+    // let right_arrow = '⇾';
+    let right_arrow = "->";
+
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
         ui.hyperlink_to("It's RoTAto!!", "https://github.com/stnbu/rotato");
         ui.add(egui::Separator::default());
         ui.label("mouse scroll = move camera toward/away from origin");
         ui.label(format!(
-            "{b_key} {plus} {mouse} = rotate camera [b]oom about origin"
+            "{g_key} {plus} {mouse} {right_arrow} {g_key}imbal the camera"
         ));
         ui.label(format!(
-            "{g_key} {plus} {mouse} = [g]imbal camera (look around)"
+            "{b_key} {plus} {mouse} {right_arrow} rotate the camera {b_key}oom"
         ));
-        ui.label("SPACE = (un)pause rotation ");
+        ui.label("SPACE {right_arrow} (un)pause rotation ");
         ui.add(egui::Separator::default());
         // -
         ui.add(egui::Slider::new(&mut pending_parameters.y_bias, 0.0..=7.0).text("Y-bias"));
