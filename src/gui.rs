@@ -10,20 +10,11 @@ pub fn menu(
     if parameters.is_added() {
         *pending_parameters = *parameters;
     }
-    let b_key = '🅱';
-    // Both the below literal g-keycap character below as well as
-    // its (according to python) ord "\u{1F176}" do not work
-    // and show up i egui as an empty square. YET, the above
-    // b-keycap does work! Leaving as-is to garner sympathy.
-    let g_key = '🅶';
+    let b_key = 'B';
+    let g_key = 'G';
     let plus = '\u{002B}';
     let mouse = '\u{1f5B1}';
-    // // egui sure has a lot of empty squares. These do not work:
-    // let right_arrow = '→';
-    // let right_arrow = '⇰';
-    // let right_arrow = '⇾';
-    let right_arrow = "->";
-
+    let right_arrow = " --> ";
     egui::Window::new("Configuration...").show(contexts.ctx_mut(), |ui| {
         ui.hyperlink_to("It's RoTAto!!", "https://github.com/stnbu/rotato");
         ui.add(egui::Separator::default());
